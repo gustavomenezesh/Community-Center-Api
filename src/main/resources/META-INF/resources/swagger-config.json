@@ -1,0 +1,9 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Community Center API",
+    "description": "API for managing community centers and resources during emergencies.",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}
