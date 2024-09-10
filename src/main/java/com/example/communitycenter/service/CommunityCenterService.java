@@ -1,7 +1,6 @@
 package com.example.communitycenter.service;
 
 import com.example.communitycenter.exception.utils.ConflictException;
-import com.example.communitycenter.mapper.CommunityCenterMapper;
 import com.example.communitycenter.model.CommunityCenter;
 import com.example.communitycenter.repository.CommunityCenterRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommunityCenterService {
 
     private final CommunityCenterRepository communityCenterRepository;
-    private final CommunityCenterMapper mapper;
 
     @Transactional
     public CommunityCenter createCommunityCenter(CommunityCenter communityCenter) {
