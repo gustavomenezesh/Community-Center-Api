@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/community-centers")
@@ -36,5 +37,10 @@ public class CommunityCenterController {
     public ResponseEntity<Void> updateOccupancy(@PathVariable String name, @Valid @RequestBody UpdateOccupancyFormDTO form) {
         communityCenterService.updateOccupancy(name, form);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/highOccupancy")
+    public ResponseEntity<List<CommunityCenter>> listHighOccupancy(){
+        return ResponseEntity.ok().body(communityCenterService.listHighOccupancyCenters());
     }
 }
