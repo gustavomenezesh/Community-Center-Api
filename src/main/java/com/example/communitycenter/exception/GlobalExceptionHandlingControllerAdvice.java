@@ -1,8 +1,9 @@
 package com.example.communitycenter.exception;
 
-import com.example.communitycenter.exception.utils.ConflictException;
+import com.example.communitycenter.exception.utils.httpException.ConflictException;
 import com.example.communitycenter.exception.utils.ErrorDTO;
 import com.example.communitycenter.exception.utils.MessageService;
+import com.example.communitycenter.exception.utils.httpException.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,16 @@ public class GlobalExceptionHandlingControllerAdvice {
                 .build();
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorDTO handleNotFoundException(NotFoundException ex) {
+        logger.error("NotFoundException - " + ex.toString());
+        return ErrorDTO.builder()
+                .code("404")
+                .detail(ex.getMessage())
+                .build();
+    }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
