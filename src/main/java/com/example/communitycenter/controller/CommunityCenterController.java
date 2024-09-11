@@ -20,8 +20,8 @@ public class CommunityCenterController {
     private CommunityCenterService communityCenterService;
 
     @PostMapping("/")
-    public ResponseEntity<CommunityCenter> createCommunityCenter(@Valid @RequestBody CreateCommunityCenterFormDTO communityCenter) {
-        CommunityCenter savedCommunityCenter = communityCenterService.createCommunityCenter(communityCenter.transformToObject());
+    public ResponseEntity<CommunityCenter> create(@Valid @RequestBody CreateCommunityCenterFormDTO communityCenter) {
+        CommunityCenter savedCommunityCenter = communityCenterService.create(communityCenter);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

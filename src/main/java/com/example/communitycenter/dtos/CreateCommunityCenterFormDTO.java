@@ -53,6 +53,7 @@ public class CreateCommunityCenterFormDTO {
                 )
         );
     }
+
 }
 
 @Getter
@@ -74,6 +75,7 @@ class AddressFormDTO {
     @NotNull(message = "ZipCode is required")
     @NotBlank(message = "ZipCode cannot be empty")
     private String zipCode;
+
 }
 
 @Getter
@@ -94,4 +96,5 @@ class ResourcesFormDTO {
 
     @Min(value = 0, message = "Basic Food Baskets must be at least 0")
     private Integer basicFoodBaskets;
+
 }
