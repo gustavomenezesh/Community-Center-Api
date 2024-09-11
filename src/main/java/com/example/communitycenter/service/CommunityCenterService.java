@@ -7,6 +7,7 @@ import com.example.communitycenter.exception.utils.httpException.NotFoundExcepti
 import com.example.communitycenter.model.CommunityCenter;
 import com.example.communitycenter.providers.rabbitMQ.RabbitMQProducer;
 import com.example.communitycenter.repository.CommunityCenterRepository;
+import com.example.communitycenter.response.AverageResourcesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -64,4 +65,28 @@ public class CommunityCenterService {
         AggregationResults<CommunityCenter> results = mongoTemplate.aggregate(aggregation, "community_centers", CommunityCenter.class);
         return results.getMappedResults();
     }
+
+    public AverageResourcesResponse getAverageResources() {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.project()
+                        .and("resources.doctors").as("doctors")
+                        .and("resources.volunteers").as("volunteers")
+                        .and("resources.medicalSuppliesKits").as("medicalSuppliesKits")
+                        .and("resources.transportVehicles").as("transportVehicles")
+                        .and("resources.basicFoodBaskets").as("basicFoodBaskets"),
+
+                Aggregation.group()
+                        .avg("doctors").as("doctors")
+                        .avg("volunteers").as("volunteers")
+                        .avg("medicalSuppliesKits").as("medicalSuppliesKits")
+                        .avg("transportVehicles").as("transportVehicles")
+                        .avg("basicFoodBaskets").as("basicFoodBaskets")
+        );
+
+        AggregationResults<AverageResourcesResponse> results = mongoTemplate.aggregate(aggregation, "community_centers", AverageResourcesResponse.class);
+
+        return results.getUniqueMappedResult();
+    }
+
+
 }
