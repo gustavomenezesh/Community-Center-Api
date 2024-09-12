@@ -23,7 +23,7 @@ public class NegociationController {
     private NegociationService negociationService;
 
     @PostMapping("/")
-    @Operation(summary = "Create a new negotiation")
+    @Operation(summary = "Create a new Negociation")
     public ResponseEntity<Negociation> create(@Valid @RequestBody CreateNegociationFormDTO form) {
         Negociation savedNegociation = negociationService.create(form);
 
