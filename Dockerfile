@@ -1,4 +1,7 @@
-FROM maven:3.9.9-openjdk-17 AS build
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk maven
 
 WORKDIR /app
 
@@ -9,11 +12,8 @@ COPY src /app/src
 
 RUN mvn clean package
 
-FROM openjdk:17-jdk
-
 WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
+COPY target/*.jar app.jar
 
 EXPOSE 8080
 

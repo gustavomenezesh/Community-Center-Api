@@ -4,6 +4,7 @@ package com.example.communitycenter.controller;
 import com.example.communitycenter.dtos.CreateNegociationFormDTO;
 import com.example.communitycenter.model.Negociation;
 import com.example.communitycenter.service.NegociationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class NegociationController {
     private NegociationService negociationService;
 
     @PostMapping("/")
+    @Operation(summary = "Create a new negotiation")
     public ResponseEntity<Negociation> create(@Valid @RequestBody CreateNegociationFormDTO form) {
         Negociation savedNegociation = negociationService.create(form);
 
@@ -35,6 +37,7 @@ public class NegociationController {
     }
 
     @GetMapping("/{communityCenterName}/history")
+    @Operation(summary = "Get Community Center Negociations Historic")
     public ResponseEntity<List<Negociation>> listHighOccupancy(
             @PathVariable String communityCenterName,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime negociationDate
