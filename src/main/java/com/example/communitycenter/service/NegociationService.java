@@ -8,11 +8,14 @@ import com.example.communitycenter.model.Negociation;
 import com.example.communitycenter.model.ResourceType;
 import com.example.communitycenter.repository.CommunityCenterRepository;
 import com.example.communitycenter.repository.NegociationRepository;
+import com.example.communitycenter.repository.NegociationRepositoryCustom;
 import com.example.communitycenter.repository.ResourcePointsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -21,8 +24,10 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class NegociationService {
     private final NegociationRepository negociationRepository;
+    private final NegociationRepositoryCustom negociationCustomRepository;
     private final CommunityCenterRepository communityCenterRepository;
     private final ResourcePointsRepository resourcePointsRepository;
+    private final MongoTemplate mongoTemplate;
 
     @Transactional
     public Negociation create(CreateNegociationFormDTO form) {
@@ -47,6 +52,13 @@ public class NegociationService {
         communityCenterRepository.save(destinationCenter);
         return negociationRepository.save(form.transformToObject());
     }
+
+    public List<Negociation> historic(String communityCenterName, LocalDateTime negociationDate) {
+        validateCenterExists(communityCenterName);
+
+        return negociationCustomRepository.findHistoric(communityCenterName, negociationDate);
+    }
+
 
     private CommunityCenter validateCenterExists(String centerName) {
         return communityCenterRepository.findByName(centerName)

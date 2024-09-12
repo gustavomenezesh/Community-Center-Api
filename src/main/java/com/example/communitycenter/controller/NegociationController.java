@@ -5,15 +5,15 @@ import com.example.communitycenter.dtos.CreateNegociationFormDTO;
 import com.example.communitycenter.model.Negociation;
 import com.example.communitycenter.service.NegociationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/negociations")
@@ -32,5 +32,13 @@ public class NegociationController {
                 .toUri();
 
         return ResponseEntity.created(location).body(savedNegociation);
+    }
+
+    @GetMapping("/{communityCenterName}/history")
+    public ResponseEntity<List<Negociation>> listHighOccupancy(
+            @PathVariable String communityCenterName,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime negociationDate
+    ) {
+        return ResponseEntity.ok().body(negociationService.historic(communityCenterName, negociationDate));
     }
 }

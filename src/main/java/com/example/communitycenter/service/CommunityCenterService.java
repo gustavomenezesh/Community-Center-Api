@@ -10,9 +10,6 @@ import com.example.communitycenter.repository.CommunityCenterRepository;
 import com.example.communitycenter.response.AverageResourcesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,37 +52,11 @@ public class CommunityCenterService {
     }
 
     public List<CommunityCenter> listHighOccupancyCenters() {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("capacity").exists(true).and("currentOccupancy").exists(true)),
-                Aggregation.project("id", "name", "address", "capacity", "currentOccupancy", "resources")
-                        .andExpression("currentOccupancy / capacity").as("occupancyRate"),
-                Aggregation.match(Criteria.where("occupancyRate").gt(0.9))
-        );
-
-        AggregationResults<CommunityCenter> results = mongoTemplate.aggregate(aggregation, "community_centers", CommunityCenter.class);
-        return results.getMappedResults();
+        return communityCenterRepository.findHighOccupancyCenters();
     }
 
     public AverageResourcesResponse getAverageResources() {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.project()
-                        .and("resources.doctors").as("doctors")
-                        .and("resources.volunteers").as("volunteers")
-                        .and("resources.medicalSuppliesKits").as("medicalSuppliesKits")
-                        .and("resources.transportVehicles").as("transportVehicles")
-                        .and("resources.basicFoodBaskets").as("basicFoodBaskets"),
-
-                Aggregation.group()
-                        .avg("doctors").as("doctors")
-                        .avg("volunteers").as("volunteers")
-                        .avg("medicalSuppliesKits").as("medicalSuppliesKits")
-                        .avg("transportVehicles").as("transportVehicles")
-                        .avg("basicFoodBaskets").as("basicFoodBaskets")
-        );
-
-        AggregationResults<AverageResourcesResponse> results = mongoTemplate.aggregate(aggregation, "community_centers", AverageResourcesResponse.class);
-
-        return results.getUniqueMappedResult();
+        return communityCenterRepository.getAverageResources();
     }
 
 
