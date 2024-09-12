@@ -45,7 +45,7 @@ public class CommunityCenterService {
 
         communityCenter.setCurrentOccupancy(form.getOccupancy());
         communityCenterRepository.save(communityCenter);
-        if(form.getOccupancy().equals(communityCenter.getCapacity())){
+        if(form.getOccupancy().equals(communityCenter.getCapacity())){                                                  // If the center is full, notify the queue
             String message = "Community Center '" + name + "' has reached maximum capacity.";
             rabbitMQProducer.sendMessage(message);
         }

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CreateCommunityCenterFormDTO {
+public class CreateCommunityCenterFormDTO {                                     // CreateCmmunityCenter Validator Body
 
     @NotNull(message = "Name is required")
     @NotBlank(message = "Name cannot be empty")
@@ -33,7 +33,7 @@ public class CreateCommunityCenterFormDTO {
     @Valid
     private ResourcesFormDTO resources;
 
-    public CommunityCenter transformToObject(){
+    public CommunityCenter transformToObject(){                                     // Mapper to transform in model class
         return new CommunityCenter(
                 null,
                 getName(),
@@ -56,6 +56,7 @@ public class CreateCommunityCenterFormDTO {
 
 }
 
+// Validate class dependents too
 @Getter
 @Setter
 class AddressFormDTO {

@@ -16,11 +16,11 @@ public interface CommunityCenterRepository extends MongoRepository<CommunityCent
             "{ $project: { id: 1, name: 1, address: 1, capacity: 1, currentOccupancy: 1, resources: 1, occupancyRate: { $divide: [ '$currentOccupancy', '$capacity' ] } } }",
             "{ $match: { occupancyRate: { $gt: 0.9 } } }"
     })
-    List<CommunityCenter> findHighOccupancyCenters();
+    List<CommunityCenter> findHighOccupancyCenters();                   // calculate the percentage between capacity and occupancy of all documents matching percentages above 90%
 
     @Aggregation(pipeline = {
             "{ $project: { doctors: '$resources.doctors', volunteers: '$resources.volunteers', medicalSuppliesKits: '$resources.medicalSuppliesKits', transportVehicles: '$resources.transportVehicles', basicFoodBaskets: '$resources.basicFoodBaskets' } }",
             "{ $group: { _id: null, doctors: { $avg: '$doctors' }, volunteers: { $avg: '$volunteers' }, medicalSuppliesKits: { $avg: '$medicalSuppliesKits' }, transportVehicles: { $avg: '$transportVehicles' }, basicFoodBaskets: { $avg: '$basicFoodBaskets' } } }"
     })
-    AverageResourcesResponse getAverageResources();
+    AverageResourcesResponse getAverageResources();                     // averaging all resources
 }

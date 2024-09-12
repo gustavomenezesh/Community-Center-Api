@@ -34,22 +34,27 @@ public class NegociationService {
         CommunityCenter originCenter = validateCenterExists(form.getOriginCenterName());
         CommunityCenter destinationCenter = validateCenterExists(form.getDestinationCenterName());
 
-        boolean haveHighOccupancy = verifyHighOccupancy(originCenter, destinationCenter);
+        boolean haveHighOccupancy = verifyHighOccupancy(originCenter, destinationCenter);                   // Checking if any of the centers have high occupancy
 
         if (!haveHighOccupancy) {
             int sumOriginPoints = calculateTotalPoints(form.getOriginResources());
             int sumDestinationPoints = calculateTotalPoints(form.getDestinationResources());
 
-            if (sumOriginPoints != sumDestinationPoints) {
+            if (sumOriginPoints != sumDestinationPoints) {                                                 // If none of them do, check whether the resources involved have the same value to continue the negotiation.
                 throw new RuntimeException("The negociation points aren't equal");
             }
         }
 
+        // performing the exchange of resources
         updateResources(originCenter, destinationCenter, form.getOriginResources(), true);
         updateResources(originCenter, destinationCenter, form.getDestinationResources(), false);
 
+
+        // Saving the changes
         communityCenterRepository.save(originCenter);
         communityCenterRepository.save(destinationCenter);
+
+        // Creating the negociation in mongo
         return negociationRepository.save(form.transformToObject());
     }
 
@@ -84,6 +89,8 @@ public class NegociationService {
 
     private void updateResources(CommunityCenter originCenter, CommunityCenter destinationCenter,
                                  List<NegociationResourcesFormDTO> resources, boolean isOriginToDestination) {
+
+        // going through all the resources involved and making the exchanges
         resources.forEach(resource -> {
             ResourceType resourceType = ResourceType.fromName(resource.getName());
             switch (resourceType) {
@@ -131,6 +138,8 @@ public class NegociationService {
     private void updateResource(Supplier<Integer> originGetter, Consumer<Integer> originSetter,
                                 Supplier<Integer> destinationGetter, Consumer<Integer> destinationSetter,
                                 int quantity, boolean isOriginToDestination) {
+
+        // Doing the Exchanges using Spplier and Consumer
         int currentOriginValue = originGetter.get();
         int currentDestinationValue = destinationGetter.get();
 

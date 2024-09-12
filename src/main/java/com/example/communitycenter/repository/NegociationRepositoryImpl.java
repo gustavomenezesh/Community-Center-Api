@@ -20,11 +20,14 @@ public class NegociationRepositoryImpl implements NegociationRepositoryCustom {
     @Override
     public List<Negociation> findHistoric(String communityCenterName, LocalDateTime negociationDate) {
         Query query = new Query();
+
+        // Filter to get the community center negociations
         query.addCriteria(new Criteria().orOperator(
                 Criteria.where("originCenterName").is(communityCenterName),
                 Criteria.where("destinationCenterName").is(communityCenterName)
         ));
 
+        // if exixst date filter, apply the gte
         if (negociationDate != null) {
             Instant instant = negociationDate.atZone(ZoneId.systemDefault())
                     .withZoneSameInstant(ZoneId.of("UTC"))
