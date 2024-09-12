@@ -1,5 +1,6 @@
 package com.example.communitycenter.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class NegociationResourcesFormDTO {
 
     @NotNull(message = "Resource name is required")

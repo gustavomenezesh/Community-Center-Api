@@ -23,7 +23,7 @@ public class CommunityCenterService {
     private final RabbitMQProducer rabbitMQProducer;
     private final MongoTemplate mongoTemplate;
 
-    private CommunityCenter validateCenterExists(String centerName) {
+    public CommunityCenter validateCenterExists(String centerName) {
         return communityCenterRepository.findByName(centerName)
                 .orElseThrow(() -> new NotFoundException("Not Found Community Center with name '" + centerName + "'"));
     }
