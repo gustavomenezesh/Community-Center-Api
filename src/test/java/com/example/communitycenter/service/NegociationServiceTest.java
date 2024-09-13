@@ -86,7 +86,6 @@ class NegociationServiceTest {
 
         Negociation createdNegociation = negociationService.create(formDTO);
 
-        // Verifica se o objeto retornado é igual ao esperado
         assertEquals(expectedNegociation.getOriginCenterName(), createdNegociation.getOriginCenterName());
         assertEquals(expectedNegociation.getDestinationCenterName(), createdNegociation.getDestinationCenterName());
         assertEquals(expectedNegociation.getOriginResources().size(), createdNegociation.getOriginResources().size());

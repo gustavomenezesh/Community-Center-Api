@@ -78,14 +78,14 @@ class CommunityCenterServiceTest {
     @Test
     public void shouldThrowExceptionWhenOccupancyExceedsCapacity() throws Exception {
         UpdateOccupancyFormDTO formDTO = new UpdateOccupancyFormDTO();
-        formDTO.setOccupancy(120); // Nova ocupação que excede a capacidade
+        formDTO.setOccupancy(120);
 
         CommunityCenter communityCenter = new CommunityCenter(
                 "123",
                 "Centro Teste",
                 new Address("Rua X", "Cidade Y", "Estado Z", "12345-678"),
-                100, // Capacidade
-                50,  // Ocupação atual
+                100,
+                50,
                 new Resources()
         );
 
@@ -107,42 +107,33 @@ class CommunityCenterServiceTest {
                 new CommunityCenter("2", "Centro B", new Address("Rua B", "Cidade B", "Estado B", "22222-222"), 200, 190, new Resources())
         );
 
-        // Mock para retornar os centros que têm alta ocupação
         Mockito.when(communityCenterRepository.findHighOccupancyCenters()).thenReturn(centers);
 
-        // Chama o método do serviço
         List<CommunityCenter> result = communityCenterService.listHighOccupancyCenters();
 
-        // Verifica que os centros retornados são os esperados
         assertNotNull(result);
-        assertEquals(2, result.size()); // Apenas "Centro A" e "Centro B" estão com alta ocupação
+        assertEquals(2, result.size());
         assertEquals("Centro A", result.get(0).getName());
         assertEquals("Centro B", result.get(1).getName());
 
-        // Verifica que o repositório foi chamado corretamente
         Mockito.verify(communityCenterRepository, Mockito.times(1)).findHighOccupancyCenters();
     }
 
     @Test
     public void shouldGetAverageResources() throws Exception {
-        // Cria uma resposta mockada com os valores médios dos recursos
+
         AverageResourcesResponse response = new AverageResourcesResponse(2.5, 5.0, 7.0, 3.5, 10.0);
 
-        // Simula a chamada ao método do serviço e o retorno dos valores médios
         Mockito.when(communityCenterService.getAverageResources()).thenReturn(response);
 
-        // Chama o método do serviço
         AverageResourcesResponse result = communityCenterService.getAverageResources();
 
-        // Verifica se os valores médios retornados estão corretos
         assertNotNull(result);
         assertEquals(2.5, result.getDoctors());
         assertEquals(5.0, result.getVolunteers());
         assertEquals(7.0, result.getMedicalSuppliesKits());
         assertEquals(3.5, result.getTransportVehicles());
         assertEquals(10.0, result.getBasicFoodBaskets());
-
-        // Aqui não é necessário o verify(), pois estamos testando o serviço diretamente
     }
 
 }
