@@ -132,12 +132,10 @@ class NegociationServiceTest {
                 new Negociation("2", "Centro A", "Centro C", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now())
         );
 
-        Mockito.when(communityCenterRepository.findByName("Centro A"))
-                .thenReturn(Optional.of(new CommunityCenter("1", "Centro A", new Address(), 100, 70, new Resources())));
-
-        Mockito.when(negociationRepositoryCustom.findHistoric("Centro A", LocalDateTime.now().minusHours(3)))
+        Mockito.when(negociationRepositoryCustom.findHistoric(Mockito.eq("Centro A"), Mockito.any(LocalDateTime.class)))
                 .thenReturn(negociationHistory);
 
+        Mockito.when(communityCenterRepository.findByName("Centro A")).thenReturn(Optional.of(new CommunityCenter(null, "Centro A", null, 100, 0, null)));
         List<Negociation> result = negociationService.historic("Centro A", LocalDateTime.now().minusHours(3));
 
         assertNotNull(result);
@@ -145,5 +143,6 @@ class NegociationServiceTest {
         assertEquals("Centro A", result.get(0).getOriginCenterName());
         assertEquals("Centro C", result.get(1).getDestinationCenterName());
     }
+
 
 }

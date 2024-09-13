@@ -8,6 +8,7 @@ RUN mvn dependency:go-offline
 COPY . .
 
 RUN mvn clean package -DskipTests
+RUN mvn test
 
 FROM openjdk:17-jdk
 
